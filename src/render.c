@@ -70,7 +70,7 @@ static void draw_diamond(int cx, int cy, int radius, COLORREF fill,
   ex_line(cx + radius, cy, cx, cy + radius);
   ex_line(cx, cy + radius, cx - radius, cy);
   ex_line(cx - radius, cy, cx, cy - radius);
-  ex_setlinecolor(WHITE);
+  ex_setlinecolor(RGB(255, 255, 255));
   ex_line(cx, cy - radius + 2, cx + radius / 2, cy);
   ex_line(cx, cy - radius + 2, cx - radius / 2, cy);
 }
@@ -141,7 +141,7 @@ int render_init(RenderContext *ctx) {
   }
 
   ex_initgraph(WINDOW_WIDTH, WINDOW_HEIGHT);
-  ex_setbkcolor(BLACK);
+  ex_setbkcolor(RGB(0, 0, 0));
   ex_begin_batch_draw();
   ctx->initialized = 1;
   return 1;
@@ -257,7 +257,8 @@ void render_player(RenderContext *ctx, Player *player) {
       draw_filled_circle((int)grab_x, (int)grab_y, rad);
       break;
     case OBJ_DIAMOND:
-      draw_diamond((int)grab_x, (int)grab_y, rad, RGB(0, 255, 255), WHITE);
+      draw_diamond((int)grab_x, (int)grab_y, rad, RGB(0, 255, 255),
+                   RGB(255, 255, 255));
       break;
     case OBJ_STONE:
       ex_setfillcolor(RGB(128, 128, 128));
@@ -327,7 +328,8 @@ void render_menu(RenderContext *ctx, int highscore) {
 
   draw_text_center(WINDOW_WIDTH / 2, 175, 42, RGB(255, 215, 0),
                    i18n_get("MENU_TITLE"));
-  draw_text_center(WINDOW_WIDTH / 2, 245, 26, WHITE, i18n_get("MENU_START"));
+  draw_text_center(WINDOW_WIDTH / 2, 245, 26, RGB(255, 255, 255),
+                   i18n_get("MENU_START"));
 
   if (highscore > 0) {
     snprintf(buffer, sizeof(buffer), i18n_get("MENU_HIGH_SCORE"), highscore);
@@ -385,7 +387,7 @@ void render_shop(RenderContext *ctx, LinkedList *items, int score,
     ex_setlinecolor((i == selected) ? RGB(255, 215, 0) : RGB(120, 130, 170));
     ex_rectangle(120, y, 680, y + 88);
 
-    draw_text_line(145, y + 14, 26, WHITE, i18n_get(name_key));
+    draw_text_line(145, y + 14, 26, RGB(255, 255, 255), i18n_get(name_key));
     draw_text_line(145, y + 46, 18, RGB(220, 220, 220), i18n_get(desc_key));
 
     if (item->owned) {
@@ -416,7 +418,7 @@ void render_level_complete(RenderContext *ctx, int score, int target,
   draw_text_center(WINDOW_WIDTH / 2, 195, 40, RGB(120, 255, 120),
                    i18n_get("LC_TITLE"));
   snprintf(buffer, sizeof(buffer), i18n_get("LC_SUBTITLE"), level);
-  draw_text_center(WINDOW_WIDTH / 2, 255, 24, WHITE, buffer);
+  draw_text_center(WINDOW_WIDTH / 2, 255, 24, RGB(255, 255, 255), buffer);
   snprintf(buffer, sizeof(buffer), i18n_get("LC_SCORE"), score, target);
   draw_text_center(WINDOW_WIDTH / 2, 295, 22, RGB(255, 215, 0), buffer);
   draw_text_center(WINDOW_WIDTH / 2, 340, 20, RGB(220, 220, 220),
@@ -435,7 +437,7 @@ void render_game_over(RenderContext *ctx, int score, int highscore) {
   draw_text_center(WINDOW_WIDTH / 2, 185, 40, RGB(255, 100, 100),
                    i18n_get("GO_TITLE"));
   snprintf(buffer, sizeof(buffer), i18n_get("GO_FINAL"), score);
-  draw_text_center(WINDOW_WIDTH / 2, 250, 24, WHITE, buffer);
+  draw_text_center(WINDOW_WIDTH / 2, 250, 24, RGB(255, 255, 255), buffer);
 
   if (score > highscore) {
     draw_text_center(WINDOW_WIDTH / 2, 292, 22, RGB(255, 215, 0),
