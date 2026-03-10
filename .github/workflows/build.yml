@@ -1,0 +1,45 @@
+name: Build Windows
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        configuration:
+          - Debug
+          - Release
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Build solution
+        run: >
+          msbuild gold_miner_easyx.sln
+          /t:Build
+          /p:Configuration=${{ matrix.configuration }}
+          /p:Platform=x64
+          /m
+
+      - name: Upload build artifacts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold_miner_easyx-${{ matrix.configuration }}-x64
+          path: |
+            dist/${{ matrix.configuration }}/
+            data/levels.txt
+
